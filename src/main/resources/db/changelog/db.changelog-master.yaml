@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-initial-check
+      author: shadin
+      changes:
+        - sql:
+            sql: SELECT 1;
