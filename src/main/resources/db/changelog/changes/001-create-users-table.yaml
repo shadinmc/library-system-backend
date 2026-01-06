@@ -1,0 +1,67 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-users-table
+      author: shadin
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: username
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+
+
+  - changeSet:
+      id: 002-insert-admin-user
+      author: shadin
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: username
+                  value: admin
+              - column:
+                  name: password
+                  value: admin123
+              - column:
+                  name: role
+                  value: ROLE_ADMIN
+
+
+  - changeSet:
+      id: 003-insert-member-user
+      author: shadin
+      context: dev
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: username
+                  value: member
+              - column:
+                  name: password
+                  value: member123
+              - column:
+                  name: role
+                  value: ROLE_USER

@@ -1,7 +1,5 @@
 databaseChangeLog:
-  - changeSet:
-      id: 001-initial-check
-      author: shadin
-      changes:
-        - sql:
-            sql: SELECT 1;
+  - include:
+      file: db/changelog/changes/001-create-users-table.yaml
+  - include:
+      file: db/changelog/changes/002-create-books-table.yaml
