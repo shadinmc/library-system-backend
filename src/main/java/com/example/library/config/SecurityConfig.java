@@ -11,6 +11,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import com.example.library.security.JwtAuthenticationFilter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 
 @Configuration
@@ -26,18 +30,29 @@ public class SecurityConfig {
     // 🔐 Chain 1: API endpoints (/api/**) → BASIC AUTH (for now)
     @Bean
     @Order(1)
-    public SecurityFilterChain apiSecurityChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain apiSecurityChain(
+            HttpSecurity http,
+            UserDetailsService userDetailsService
+    ) throws Exception {
+
+        JwtAuthenticationFilter jwtFilter =
+                new JwtAuthenticationFilter(userDetailsService);
 
         http
                 .securityMatcher("/api/**")
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/login").permitAll() // 👈 CRITICAL
+                        .requestMatchers("/api/auth/login").permitAll()
                         .anyRequest().authenticated()
                 )
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable());
 
         return http.build();
     }
+
 
 
     // 🔐 Chain 2: Non-API endpoints (H2, actuator, swagger)
