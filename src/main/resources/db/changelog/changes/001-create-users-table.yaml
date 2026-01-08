@@ -42,7 +42,7 @@ databaseChangeLog:
                   value: admin
               - column:
                   name: password
-                  value: admin123
+                  value: $2a$10$3e9EJyAU5EbgNL68.mdmFOfGnV1S2v4CbnyA/otvLJpmEucbzFeYO
               - column:
                   name: role
                   value: ROLE_ADMIN
@@ -51,7 +51,6 @@ databaseChangeLog:
   - changeSet:
       id: 003-insert-member-user
       author: shadin
-      context: dev
       changes:
         - insert:
             tableName: users
@@ -61,7 +60,19 @@ databaseChangeLog:
                   value: member
               - column:
                   name: password
-                  value: member123
+                  value: $2a$10$Bi69jbxlX/gThJeXxqQcleyL8Xy8EoMp9RnMJxWDPUcAEXX2oZtvK
               - column:
                   name: role
                   value: ROLE_USER
+  - changeSet:
+      id: 004-update-admin-password
+      author: shadin
+      context: prod
+      changes:
+        - update:
+            tableName: users
+            columns:
+              - column:
+                  name: password
+                  value: $2a$10$3e9EJyAU5EbgNL68.mdmFOfGnV1S2v4CbnyA/otvLJpmEucbzFeYO
+            where: username='admin'

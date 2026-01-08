@@ -15,6 +15,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import com.example.library.security.JwtAuthenticationFilter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 
 
 @Configuration
@@ -24,8 +26,9 @@ public class SecurityConfig {
     // 🔐 TEMP password encoder (because DB has plain text passwords)
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
+
 
     // 🔐 Chain 1: API endpoints (/api/**) → BASIC AUTH (for now)
     @Bean
